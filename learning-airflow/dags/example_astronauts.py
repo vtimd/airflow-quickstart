@@ -34,7 +34,7 @@ first DAG tutorial: https://docs.astronomer.io/learn/get-started-with-airflow
 ![Picture of the ISS](https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2010/02/space_station_over_earth/10293696-3-eng-GB/Space_Station_over_Earth_card_full.jpg)
 """
 
-from airflow import Dataset
+from airflow.sdk import Asset
 from airflow.decorators import (
     dag,
     task,
@@ -102,7 +102,11 @@ def example_astronauts():
     # encapsulated in a list, as an argument to the task's `outlets` parameter.
     # For more guidance, see: https://www.astronomer.io/docs/learn/airflow-datasets
     
-    @task
+    #Define the Asset
+
+    @task(
+        outlets=[Asset(_DUCKDB_TABLE_NAME)]
+    )
     def get_astronaut_names(**context) -> list[dict]:
         """
         This task uses the requests library to retrieve a list of Astronauts
